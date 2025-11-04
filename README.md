@@ -1,9 +1,9 @@
 # Daniel Peñalba - Personal Portfolio
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success?style=for-the-badge)](https://danipen.github.io)
+[![View Site](https://img.shields.io/badge/demo-live-success?style=for-the-badge)](https://danipen.github.io)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 
-> Building high-performance GUIs for 20 years | Senior Software Engineer @ Unity Technologies | Avalonia MVP
+> Senior Software Engineer @ Unity Technologies | Avalonia MVP
 
 ![Portfolio Preview](assets/preview.png)
 
