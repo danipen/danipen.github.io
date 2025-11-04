@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Peñalba · Senior Software Engineer</title>
+    <meta name="description" content="Building high-performance GUIs for 20 years. Avalonia MVP, #1 AvaloniaEdit contributor, creator of TextMateSharp.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #050505;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-blue: #00d9ff;
+            --accent-purple: #a78bfa;
+            --accent-cyan: #00ffcc;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glow: rgba(0, 217, 255, 0.3);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(167, 139, 250, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 255, 204, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.95);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: var(--bg-dark);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Impact Metrics */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .metric-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .metric-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.2);
+        }
+
+        .metric-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .about-highlights {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .highlight-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .highlight-item:hover {
+            transform: translateX(10px);
+            border-color: var(--accent-blue);
+        }
+
+        .highlight-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-blue);
+        }
+
+        .highlight-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 25px 50px rgba(0, 217, 255, 0.2);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .project-link {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .project-link:hover {
+            background: var(--accent-blue);
+            color: var(--bg-dark);
+            transform: scale(1.1);
+        }
+
+        .project-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .project-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-icon {
+            color: var(--accent-blue);
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Experience Section */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.5rem;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .timeline-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-company {
+            color: var(--accent-blue);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-period {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .timeline-item p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .achievements-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .achievements-list li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        .achievements-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .achievements-list strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--accent-blue);
+            color: var(--bg-dark);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 0;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        /* Code block styling */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">&lt;danipen /&gt;</div>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-label">🏆 Avalonia MVP · Senior Software Engineer</div>
+            <h1>Building high-performance GUIs for 20 years</h1>
+            <p class="subtitle">From <strong>3 codebases</strong> to <strong>1</strong>. Cross-platform GUIs that handle <strong>millions of items</strong>. Creator of <strong>TextMateSharp</strong>.</p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary">View My Work</a>
+                <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Metrics -->
+    <section>
+        <div class="container">
+            <div class="metrics">
+                <div class="metric-card fade-in">
+                    <div class="metric-number" data-target="20">0</div>
+                    <div class="metric-label">Years in Version Control</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <div class="metric-number"><span data-target="525">0</span>K+</div>
+                    <div class="metric-label">NuGet Downloads (TextMateSharp)</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <div class="metric-number"><span data-target="10">0</span>M+</div>
+                    <div class="metric-label">Items handled in UI</div>
+                </div>
+                <div class="metric-card fade-in">
+                    <div class="metric-number"><span data-target="30">0</span>x</div>
+                    <div class="metric-label">Performance Boost (BranchExplorer)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-label">About Me</div>
+                <h2 class="section-title">The GUI Performance Architect</h2>
+                <p class="section-subtitle">I literally wrote the first lines of Plastic SCM back when we were Codice Software.</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <h3>20 Years of Impact</h3>
+                    <p>I've spent most of my career building <span class="highlight">Plastic SCM</span> at <strong>Codice Software</strong> — which later became <strong>Unity Version Control</strong> after acquisition by <strong>Unity Technologies</strong>. I worked across the entire stack for <strong>15 years</strong>: from <strong>backend</strong> and <strong>services</strong> to <strong>Desktop GUI</strong>, <strong>plugins</strong> (Eclipse, Visual Studio, Unity), <strong>shell extensions</strong>, and <strong>REST APIs</strong>.</p>
+                    <p>I've battled <strong>multi-platform</strong> complexity on <strong>macOS</strong>, <strong>Linux</strong>, and <strong>Windows</strong>, shipping with technologies like <strong>WinForms</strong>, <strong>WPF</strong>, <strong>SWT</strong>, <strong>GTK#</strong>, <strong>MonoMac</strong>, and later <strong>Avalonia</strong>. I led the consolidation from <strong>3 client codebases</strong> (WinForms, Gtk#, MonoMac) into <strong>one unified cross-platform</strong> codebase with Avalonia.</p>
+                    <p>My thing is <span class="highlight">performance at scale</span>: opening files with <strong>hundreds of thousands of lines</strong>, rendering <strong>diffs</strong> instantly, and keeping lists/trees with <strong>millions of items</strong> buttery smooth through heavy <strong>virtualization</strong> and careful <strong>memory</strong>/<strong>rendering</strong> profiling.</p>
+                </div>
+                <div class="about-highlights fade-in">
+                    <div class="highlight-item">
+                        <h4>🏆 Avalonia MVP</h4>
+                        <p>Recognized for contributions to the Avalonia ecosystem and community</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>🚀 #1 AvaloniaEdit Contributor</h4>
+                        <p>Lead contributor to the powerful text editor used across the platform</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>📦 TextMateSharp Creator</h4>
+                        <p>525K+ downloads · VSCode-based syntax highlighting engine</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>⚡ Performance Obsessed</h4>
+                        <p>Desktop GUI that opens 100K+ line files and handles 10M+ item lists smoothly</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-label">Featured Work</div>
+                <h2 class="section-title">Projects</h2>
+                <p class="section-subtitle">Open Source and product work that shipped to real users</p>
+            </div>
+            <div class="section-label" style="margin-bottom: 1.5rem; display: inline-block;">Open Source</div>
+            <div class="projects-grid">
+                <!-- TextMateSharp -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div class="project-icon">📝</div>
+                        <div class="project-links">
+                            <a href="https://github.com/danipen/TextMateSharp" target="_blank" class="project-link" title="GitHub">
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+                    <h3>TextMateSharp</h3>
+                    <p>A C# port of <code>vscode-textmate</code> — a TextMate-based syntax highlighting engine. Started as a hackweek project, now powers syntax highlighting in Unity Version Control's Desktop GUI.</p>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <span class="stat-icon">📦</span>
+                            <span>525K+ downloads</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-icon">⭐</span>
+                            <span>Used in production</span>
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">C#</span>
+                        <span class="tag">.NET</span>
+                        <span class="tag">Syntax Highlighting</span>
+                        <span class="tag">TextMate</span>
+                    </div>
+                </div>
+
+                <!-- AvaloniaEdit -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div class="project-icon">✏️</div>
+                        <div class="project-links">
+                            <a href="https://github.com/AvaloniaUI/AvaloniaEdit" target="_blank" class="project-link" title="GitHub">
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+                    <h3>AvaloniaEdit</h3>
+                    <p>#1 contributor to AvaloniaEdit — a powerful text editor component for Avalonia. Used in Unity Version Control for diff/merge views and code review workflows.</p>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <span class="stat-icon">🥇</span>
+                            <span>#1 Contributor</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-icon">🔧</span>
+                            <span>Cross-platform</span>
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">C#</span>
+                        <span class="tag">Avalonia</span>
+                        <span class="tag">Text Editor</span>
+                        <span class="tag">Open Source</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-label" style="margin: 2.5rem 0 1.5rem; display: inline-block;">Product Work</div>
+            <div class="projects-grid">
+                <!-- Unity Version Control Desktop GUI -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div class="project-icon">🖥️</div>
+                        <div class="project-links"></div>
+                    </div>
+                    <h3>Unity Version Control · Desktop GUI</h3>
+                    <p>Cross-platform client for massive repos. Virtualized trees/lists, instant diffs, scalable rendering, and large-file workflows. Migrated from 3 codebases to one Avalonia app.</p>
+                    <div class="project-stats">
+                        <div class="stat"><span class="stat-icon">🌐</span><span>macOS · Windows · Linux</span></div>
+                        <div class="stat"><span class="stat-icon">⚡</span><span>10M+ items responsive</span></div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Avalonia</span>
+                        <span class="tag">C#</span>
+                        <span class="tag">Virtualization</span>
+                        <span class="tag">Rendering</span>
+                    </div>
+                </div>
+
+                <!-- Unity Version Control - Plugin -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div class="project-icon">🔌</div>
+                        <div class="project-links"></div>
+                    </div>
+                    <h3>Unity Version Control · Plugin</h3>
+                    <p>Deep integration inside Unity Editor: checkins, diffs, branch visualization, and workflows tailored for game teams. Enabled macOS development/testing via Bokken.</p>
+                    <div class="project-stats">
+                        <div class="stat"><span class="stat-icon">🎮</span><span>Unity Editor integration</span></div>
+                        <div class="stat"><span class="stat-icon">🧪</span><span>CI-ready</span></div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Unity</span>
+                        <span class="tag">C#</span>
+                        <span class="tag">Editor</span>
+                        <span class="tag">Plugin</span>
+                    </div>
+                </div>
+
+                <!-- Hackweek Powerful Editor (AvaloniaEdit port) -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div class="project-icon">🎮</div>
+                        <div class="project-links">
+                            <a href="https://youtu.be/t6nlA3H1mfU" target="_blank" class="project-link" title="YouTube Demo">
+                                <span>▶</span>
+                            </a>
+                        </div>
+                    </div>
+                    <h3>Hackweek: Unity Text Editor</h3>
+                    <p>Not open source. A powerful in-Editor text/diff tool — a port of <strong>AvaloniaEdit</strong> into Unity with syntax highlighting, diff viewer, and code review features.</p>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <span class="stat-icon">🏆</span>
+                            <span>Hackweek Winner</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-icon">🎥</span>
+                            <span>Video Demo</span>
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Unity</span>
+                        <span class="tag">C#</span>
+                        <span class="tag">Editor Extension</span>
+                        <span class="tag">Hackathon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-label">Experience</div>
+                <h2 class="section-title">Professional Journey</h2>
+            </div>
+            <div class="timeline">
+                <!-- Unity Technologies -->
+                <div class="timeline-item fade-in">
+                    <h3>Senior Software Engineer</h3>
+                    <div class="timeline-company">Unity Technologies</div>
+                    <div class="timeline-period">Jul 2020 - Present · 5+ years</div>
+                    <p>Leading development of <strong>Unity Version Control</strong> (formerly <strong>Plastic SCM</strong>) <strong>Desktop GUI</strong> and <strong>Unity Plugin</strong> following <strong>Unity's acquisition</strong> of Codice Software. Driving <strong>performance-first architecture</strong>, <strong>cross-platform excellence</strong>, and <strong>cutting-edge features</strong>.</p>
+                    <ul class="achievements-list">
+                        <li>Migrated entire codebase to <strong>Avalonia 11.x</strong> with comprehensive <strong>unit test infrastructure</strong> (10,000+ tests running in &lt;4min)</li>
+                        <li>Achieved <strong>592% faster unit tests</strong> (4.5min → 39sec) through strategic optimization and parallelization</li>
+                        <li>Delivered <strong>30x performance boost</strong> on BranchExplorer layout calculation (52s → 1.7s) — critical for large repositories</li>
+                        <li>Architected <strong>fully virtualized UI</strong> (lists/trees) enabling <strong>10M+ file repositories</strong> to remain responsive and instant</li>
+                        <li>Built <strong>AI/LLM prototypes</strong> for intelligent check-in assistance and merge conflict resolution using GPT integration</li>
+                        <li>Enabled <strong>macOS development pipeline</strong> for Unity Plugin via Bokken infrastructure — unlocking cross-platform testing</li>
+                        <li>Shipped major features: <strong>shelve & switch</strong>, <strong>advanced branch filters</strong>, <strong>quick workspace switching</strong>, <strong>org unification</strong></li>
+                        <li>Integrated <strong>TextMateSharp</strong> for VSCode-quality syntax highlighting in diffs and code review</li>
+                    </ul>
+                </div>
+
+                <!-- Codice Software -->
+                <div class="timeline-item fade-in">
+                    <h3>Senior Software Engineer</h3>
+                    <div class="timeline-company">Codice Software</div>
+                    <div class="timeline-period">Nov 2005 - Jul 2020 · 15 years</div>
+                    <p><strong>Founding engineer</strong> who wrote the first lines of <strong>Plastic SCM</strong>. Worked across the entire stack — from low-level <strong>server backend</strong> to <strong>desktop clients</strong>, <strong>IDE plugins</strong>, <strong>shell extensions</strong>, <strong>web services</strong>, and <strong>REST APIs</strong>. Fought and won the <strong>cross-platform</strong> wars (<strong>Windows</strong>, <strong>macOS</strong>, <strong>Linux</strong>).</p>
+                    <ul class="achievements-list">
+                        <li>Led <strong>massive platform consolidation</strong>: unified <strong>3 separate client codebases</strong> (WinForms/WPF, GTK#, MonoMac) into single <strong>Avalonia-based architecture</strong> — drastically improving maintainability and velocity</li>
+                        <li>Designed and built <strong>SemanticMerge</strong> — a revolutionary <strong>language-aware merge tool</strong> that understands code structure, not just text</li>
+                        <li>Built <strong>custom cross-platform GUI framework</strong> from scratch (controls, styling, layout engine) before modern frameworks existed</li>
+                        <li>Developed <strong>headless unit testing platform</strong> for GUI testing — enabling CI/CD for desktop applications</li>
+                        <li>Created <strong>ImageMagick integration</strong> for previewing 100+ image formats directly in diffs</li>
+                        <li>Implemented <strong>syntax highlighting engine</strong> based on VSCode's TextMate (later open-sourced as TextMateSharp)</li>
+                        <li>Built <strong>Visual Studio integration</strong>, <strong>Eclipse plugin</strong>, and <strong>Windows Shell Extension</strong> for seamless IDE/OS integration</li>
+                        <li>Worked on <strong>server backend</strong> (C#/.NET), <strong>web frontend</strong>, <strong>REST APIs</strong>, and <strong>distributed services</strong> — true full-stack</li>
+                        <li>Fought through <strong>GTK# on macOS</strong>, <strong>MonoMac limitations</strong>, and <strong>WinForms quirks</strong> — gaining deep cross-platform expertise</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="contact-content fade-in">
+                <div class="section-label">Get In Touch</div>
+                <h2>Let's Connect</h2>
+                <p>Interested in GUI architecture, performance optimization, or Avalonia? Let's talk.</p>
+                <div class="hero-cta">
+                    <a href="mailto:daniel.penalba@unity3d.com" class="btn btn-primary">📧 daniel.penalba@unity3d.com</a>
+                    <a href="mailto:dani_pen@hotmail.com" class="btn btn-secondary">📬 dani_pen@hotmail.com</a>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/danipen" target="_blank" class="social-link" title="GitHub">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/danipen" target="_blank" class="social-link" title="LinkedIn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="https://x.com/danipen00" target="_blank" class="social-link" title="Twitter/X">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://stackoverflow.com/users/402081/daniel-pe%c3%b1alba" target="_blank" class="social-link" title="Stack Overflow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.725 0l-1.72 1.277 6.39 8.588 1.716-1.277L15.725 0zm-3.94 3.418l-1.369 1.644 8.225 6.85 1.369-1.644-8.225-6.85zm-3.15 4.465l-.905 1.94 9.702 4.517.904-1.94-9.701-4.517zm-1.85 4.86l-.44 2.093 10.473 2.201.44-2.093-10.473-2.201zM1.89 15.47V24h19.19v-8.53h-2.133v6.397H4.021v-6.396H1.89zm4.265 2.133v2.13h10.66v-2.13H6.154Z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>📍 Valladolid, Spain · Built with vanilla HTML, CSS, and a bit of JavaScript magic</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                &lt;danipen /&gt; · Performance-obsessed GUI architect · Avalonia MVP
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animated counter
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    element.textContent = Math.floor(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target;
+                }
+            };
+
+            updateCounter();
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Trigger counter animation for metric cards
+                    if (entry.target.classList.contains('metric-card')) {
+                        const counter = entry.target.querySelector('[data-target]');
+                        if (counter && !counter.classList.contains('counted')) {
+                            counter.classList.add('counted');
+                            animateCounter(counter);
+                        }
+                    }
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add subtle parallax effect to hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+                hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
+            }
+        });
+
+        // Easter egg: Konami code
+        let konamiCode = [];
+        const pattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        window.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+            
+            if (konamiCode.join('') === pattern.join('')) {
+                document.body.style.animation = 'rainbow 2s infinite';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 5000);
+            }
+        });
+
+        // Easter egg #2: click logo for a secret toast
+        const logo = document.querySelector('.logo');
+        if (logo) {
+            logo.style.cursor = 'pointer';
+            logo.addEventListener('click', () => {
+                const toast = document.createElement('div');
+                toast.textContent = '🫶 You found the easter egg! Plastic → Unity VC — 3→1 codebase 🎉';
+                toast.style.position = 'fixed';
+                toast.style.bottom = '24px';
+                toast.style.right = '24px';
+                toast.style.padding = '12px 16px';
+                toast.style.background = 'rgba(255,255,255,0.08)';
+                toast.style.border = '1px solid var(--glass-border)';
+                toast.style.borderRadius = '10px';
+                toast.style.backdropFilter = 'blur(10px)';
+                toast.style.zIndex = '2000';
+                toast.style.color = 'var(--text-primary)';
+                toast.style.boxShadow = '0 10px 30px rgba(0, 217, 255, 0.15)';
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 300ms ease, transform 300ms ease';
+                toast.style.transform = 'translateY(10px)';
+                document.body.appendChild(toast);
+                requestAnimationFrame(() => {
+                    toast.style.opacity = '1';
+                    toast.style.transform = 'translateY(0)';
+                });
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(10px)';
+                    setTimeout(() => toast.remove(), 350);
+                }, 3500);
+            });
+        }
+    </script>
+
+    <style>
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+    </style>
+</body>
+</html>
