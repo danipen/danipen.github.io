@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daniel Peñalba · Senior Software Engineer</title>
     <meta name="description" content="Building high-performance GUIs for 20 years. Avalonia MVP, #1 AvaloniaEdit contributor, creator of TextMateSharp.">
+    <!-- Open Graph / Twitter -->
+    <meta property="og:title" content="Daniel Peñalba · Senior Software Engineer">
+    <meta property="og:description" content="Building high-performance GUIs for 20 years. Avalonia MVP, #1 AvaloniaEdit contributor, creator of TextMateSharp.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/assets/preview.png">
+    <meta property="og:url" content="https://danipen.github.io/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Daniel Peñalba · Senior Software Engineer">
+    <meta name="twitter:description" content="Building high-performance GUIs for 20 years. Avalonia MVP, #1 AvaloniaEdit contributor, creator of TextMateSharp.">
+    <meta name="twitter:image" content="/assets/preview.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,6 +65,15 @@
             text-underline-offset: 3px;
             text-decoration-color: var(--accent-blue);
         }
+        /* Focus styles for accessibility */
+        a:focus-visible,
+        .btn:focus-visible,
+        .project-link:focus-visible,
+        .social-link:focus-visible {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 3px;
+            border-radius: 6px;
+        }
 
         /* Animated gradient background */
         body::before {
@@ -77,12 +96,19 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Respect reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
+            body::before { animation: none !important; }
+        }
+
         /* Navigation */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             padding: 1.5rem 2rem;
+            padding-top: calc(1.5rem + env(safe-area-inset-top));
             background: rgba(10, 10, 10, 0.8);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
@@ -92,6 +118,7 @@
 
         nav.scrolled {
             padding: 1rem 2rem;
+            padding-top: calc(1rem + env(safe-area-inset-top));
             background: rgba(10, 10, 10, 0.95);
         }
 
@@ -701,7 +728,7 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            nav { padding: 1rem 1rem; }
+            nav { padding: 1rem 1rem; padding-top: calc(1rem + env(safe-area-inset-top)); }
 
             nav .container {
                 flex-direction: column;
@@ -777,7 +804,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <div class="hero-label">🏆 <a href="https://avaloniaui.net/mvps" target="_blank" rel="noopener">Avalonia MVP</a> · Senior Software Engineer</div>
+            <div class="hero-label">🏆 <a href="https://avaloniaui.net/mvps" target="_blank" rel="noopener noreferrer">Avalonia MVP</a> · Senior Software Engineer</div>
             <h1>Building high-performance GUIs for 20 years</h1>
             <p class="subtitle">From <strong>3 codebases</strong> to <strong>1</strong>. Cross-platform GUIs that handle <strong>millions of items</strong>. Creator of <strong><a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener">TextMateSharp</a></strong>.</p>
             <div class="hero-cta">
@@ -797,7 +824,7 @@
                 </div>
                 <div class="metric-card fade-in">
                     <div class="metric-number"><span data-target="525">0</span>K+</div>
-                    <div class="metric-label">NuGet Downloads (<a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener">TextMateSharp</a>)</div>
+                    <div class="metric-label">NuGet Downloads (<a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener noreferrer">TextMateSharp</a>)</div>
                 </div>
                 <div class="metric-card fade-in">
                     <div class="metric-number"><span data-target="10">0</span>M+</div>
@@ -828,15 +855,15 @@
                 </div>
                 <div class="about-highlights fade-in">
                     <div class="highlight-item">
-                        <h4>🏆 <a href="https://avaloniaui.net/mvps" target="_blank" rel="noopener">Avalonia MVP</a></h4>
+                        <h4>🏆 <a href="https://avaloniaui.net/mvps" target="_blank" rel="noopener noreferrer">Avalonia MVP</a></h4>
                         <p>Recognized for contributions to the Avalonia ecosystem and community</p>
                     </div>
                     <div class="highlight-item">
-                        <h4>🚀 <a href="https://github.com/AvaloniaUI/AvaloniaEdit/graphs/contributors" target="_blank" rel="noopener">#1 AvaloniaEdit Contributor</a></h4>
+                        <h4>🚀 <a href="https://github.com/AvaloniaUI/AvaloniaEdit/graphs/contributors" target="_blank" rel="noopener noreferrer">#1 AvaloniaEdit Contributor</a></h4>
                         <p>Lead contributor to the powerful text editor used across the platform</p>
                     </div>
                     <div class="highlight-item">
-                        <h4>📦 <a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener">TextMateSharp</a> Creator</h4>
+                        <h4>📦 <a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener noreferrer">TextMateSharp</a> Creator</h4>
                         <p>525K+ downloads · VSCode-based syntax highlighting engine</p>
                     </div>
                     <div class="highlight-item">
@@ -863,12 +890,12 @@
                     <div class="project-header">
                         <div class="project-icon">📝</div>
                         <div class="project-links">
-                            <a href="https://github.com/danipen/TextMateSharp" target="_blank" class="project-link" title="GitHub">
+                            <a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub">
                                 <span>→</span>
                             </a>
                         </div>
                     </div>
-                    <h3><a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener">TextMateSharp</a></h3>
+                    <h3><a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener noreferrer">TextMateSharp</a></h3>
                     <p>A C# port of <code>vscode-textmate</code> — a TextMate-based syntax highlighting engine. Started as a hackweek project, now powers syntax highlighting in Unity Version Control's Desktop GUI.</p>
                     <div class="project-stats">
                         <div class="stat">
@@ -893,13 +920,13 @@
                     <div class="project-header">
                         <div class="project-icon">✏️</div>
                         <div class="project-links">
-                            <a href="https://github.com/AvaloniaUI/AvaloniaEdit" target="_blank" class="project-link" title="GitHub">
+                            <a href="https://github.com/AvaloniaUI/AvaloniaEdit" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub">
                                 <span>→</span>
                             </a>
                         </div>
                     </div>
                     <h3>AvaloniaEdit</h3>
-                    <p>#1 contributor to <a href="https://github.com/AvaloniaUI/AvaloniaEdit/graphs/contributors" target="_blank" rel="noopener">AvaloniaEdit</a> — a powerful text editor component for Avalonia. Used in Unity Version Control for diff/merge views and code review workflows.</p>
+                    <p>#1 contributor to <a href="https://github.com/AvaloniaUI/AvaloniaEdit/graphs/contributors" target="_blank" rel="noopener noreferrer">AvaloniaEdit</a> — a powerful text editor component for Avalonia. Used in Unity Version Control for diff/merge views and code review workflows.</p>
                     <div class="project-stats">
                         <div class="stat">
                             <span class="stat-icon">🥇</span>
@@ -965,7 +992,7 @@
                     <div class="project-header">
                         <div class="project-icon">🎮</div>
                         <div class="project-links">
-                            <a href="https://youtu.be/t6nlA3H1mfU" target="_blank" class="project-link" title="YouTube Demo">
+                            <a href="https://youtu.be/t6nlA3H1mfU" target="_blank" rel="noopener noreferrer" class="project-link" title="YouTube Demo">
                                 <span>▶</span>
                             </a>
                         </div>
@@ -1010,7 +1037,7 @@
                     <ul class="achievements-list">
                         <li>Migrated entire Desktop GUI codebase to <strong>Avalonia 11.x</strong> with comprehensive <strong>unit test infrastructure</strong> (10,000+ tests running in &lt;4min)</li>
                         <li>Built the Avalonia's <strong>app UI framework</strong> (the whole styling + custom controls) from scratch</li>
-                        <li>Implemented <strong>syntax highlighting engine</strong> based on VSCode's TextMate (later open-sourced as <a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener">TextMateSharp</a>)</li>
+                        <li>Implemented <strong>syntax highlighting engine</strong> based on VSCode's TextMate (later open-sourced as <a href="https://github.com/danipen/TextMateSharp" target="_blank" rel="noopener noreferrer">TextMateSharp</a>)</li>
                         <li>Achieved <strong>592% faster unit tests</strong> (4.5min → 39sec) through strategic optimization and parallelization</li>
                         <li>Delivered <strong>30x performance boost</strong> on BranchExplorer layout calculation (52s → 1.7s) — critical for large repositories</li>
                         <li>Architected <strong>fully virtualized UI</strong> (lists/trees) enabling <strong>10M+ file repositories</strong> to remain responsive and instant</li>
@@ -1051,22 +1078,22 @@
                     <a href="mailto:dani_pen@hotmail.com" class="btn btn-secondary">📬 dani_pen@hotmail.com</a>
                 </div>
                 <div class="social-links">
-                    <a href="https://github.com/danipen" target="_blank" class="social-link" title="GitHub">
+                    <a href="https://github.com/danipen" target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                         </svg>
                     </a>
-                    <a href="https://www.linkedin.com/in/danipen" target="_blank" class="social-link" title="LinkedIn">
+                    <a href="https://www.linkedin.com/in/danipen" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                         </svg>
                     </a>
-                    <a href="https://x.com/danipen00" target="_blank" class="social-link" title="Twitter/X">
+                    <a href="https://x.com/danipen00" target="_blank" rel="noopener noreferrer" class="social-link" title="Twitter/X">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                         </svg>
                     </a>
-                    <a href="https://stackoverflow.com/users/402081/daniel-pe%c3%b1alba" target="_blank" class="social-link" title="Stack Overflow">
+                    <a href="https://stackoverflow.com/users/402081/daniel-pe%c3%b1alba" target="_blank" rel="noopener noreferrer" class="social-link" title="Stack Overflow">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M15.725 0l-1.72 1.277 6.39 8.588 1.716-1.277L15.725 0zm-3.94 3.418l-1.369 1.644 8.225 6.85 1.369-1.644-8.225-6.85zm-3.15 4.465l-.905 1.94 9.702 4.517.904-1.94-9.701-4.517zm-1.85 4.86l-.44 2.093 10.473 2.201.44-2.093-10.473-2.201zM1.89 15.47V24h19.19v-8.53h-2.133v6.397H4.021v-6.396H1.89zm4.265 2.133v2.13h10.66v-2.13H6.154Z"/>
                         </svg>
@@ -1081,7 +1108,7 @@
         <div class="container">
             <p>📍 Valladolid, Spain · Built with vanilla HTML, CSS, and a bit of JavaScript magic</p>
             <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-                &lt;danipen /&gt; · Performance-obsessed GUI architect · <a href="https://avaloniaui.net/mvps" target="_blank" rel="noopener">Avalonia MVP</a>
+                &lt;danipen /&gt; · Performance-obsessed GUI architect · <a href="https://avaloniaui.net/mvps" target="_blank" rel="noopener noreferrer">Avalonia MVP</a>
             </p>
         </div>
     </footer>
@@ -1162,15 +1189,18 @@
             });
         });
 
-        // Add subtle parallax effect to hero
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero-content');
-            if (hero && scrolled < window.innerHeight) {
-                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
-                hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
-            }
-        });
+        // Add subtle parallax effect to hero (respects reduced motion)
+        const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!prefersReducedMotion) {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const hero = document.querySelector('.hero-content');
+                if (hero && scrolled < window.innerHeight) {
+                    hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+                    hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
+                }
+            });
+        }
 
         // Easter egg: Konami code
         let konamiCode = [];
